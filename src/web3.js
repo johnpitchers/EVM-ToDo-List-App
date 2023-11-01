@@ -11,11 +11,13 @@ class Web3 {
   provider = null;
   network = null;
   contract = null;
+  allowedNetworks = ["sepolia", "polygon", "optimism"];
   state = reactive({
     network: {},
     awaitingConfirmation: false,
     txHash: "",
-    error: {}
+    txConfirmed: false,
+    error: {},
   });
 
 
@@ -27,37 +29,55 @@ class Web3 {
   }
 
   connectToMetamask = async () => {
+    this.state.error = {};
+    // Check web3 exention is available.
+    if (!window.ethereum) {
+      this.state.error = {
+        code: 80000,
+        message: "Web3 not available.",
+        recoverable: false
+      }
+      throw new Error(this.state.error.valueOf().message);
+    }
+
     // Connect to Metamask
     if (this.signer) {
       console.log("REFRESHING CONNECTION.")
     }
     console.log("CONNECTING TO METAMASK")
-    try {
-      this.provider = await new BrowserProvider(window.ethereum, "any");
-    } catch (e) {
-      console.log("NO METAMASK:", e);
-    }
 
+    this.provider = await new BrowserProvider(window.ethereum, "any");
     try {
       this.signer = await this.provider.getSigner();
+      this.network = await this.provider.getNetwork();
     } catch (e) {
-      console.log(this.provider);
-      console.log("NO SIGNER:", e);
-      window.e = e;
-
+      this.state.error = {
+        code: 80002,
+        message: "Web3 not configured.",
+        recoverable: false
+      }
+      throw new Error(this.state.error.valueOf().message);
     }
-    this.network = await this.provider.getNetwork();
     this.state.network = {
-      name:this.network.name,
+      name: this.network.name,
       address: this.signer.address
     };
+    if (!this.allowedNetworks.includes(this.network.name)) {
+      this.state.error = {
+        code: 80001,
+        message: "Network not recognised.",
+        recoverable: false
+      }
+      //throw new Error(this.state.error.valueOf().message);
+    }
     console.log("Signer", this.signer)
-    console.log(this.state.network);
+    console.log(this.state.network.name);
   }
 
   setUpEventListeners = async () => {
     this.provider.on('network', async (e) => {
       console.log("NETWORK EVENT", e);
+      //alert("Network has been changed.");
       window.location.reload();
     })
 
@@ -65,7 +85,8 @@ class Web3 {
     window.ethereum.on('accountsChanged', async (e) => {
       if (e[0] !== this.signer.getAddress()) {
         await this.connectToMetamask();
-        confirm("Blockchain account has been changed.")
+        //alert("Blockchain account has been changed.");
+        window.location.reload();
       }
     });
 
@@ -126,6 +147,7 @@ class Web3 {
   sendTransaction = async () => {
     let taskList = JSON.parse(window.localStorage.getItem('todoList'))
     this.state.error = {};
+    this.state.txConfirmed = false;
     let txData = [];
     for (let i = 0; i < taskList.length; i++) {
       let taskData = [
@@ -148,7 +170,8 @@ class Web3 {
     } catch (e) {
       this.state.error = {
         code: e.info.error.code,
-        message: e.info.error.message
+        message: e.info.error.message,
+        recoverable: true
       };
       return;
     }
@@ -157,6 +180,7 @@ class Web3 {
     this.state.awaitingConfirmation = true;
     await tx.wait();
     this.state.awaitingConfirmation = false;
+    this.state.txConfirmed = true;
     console.log("TRANSACTION MINED", tx);
   }
 }

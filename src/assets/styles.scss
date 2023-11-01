@@ -35,3 +35,17 @@ body {
   min-width: 20px;
   min-height: 20px;
 }
+
+.fs-6 {
+  font-size: 17px !important;
+}
+
+.nav-link {
+  font-weight: bold;
+  text-transform: uppercase;
+  --bs-nav-link-padding-x: 1em;
+
+  &.router-link-active {
+    color: rgba(var(--bs-primary-rgb));
+  }
+}
