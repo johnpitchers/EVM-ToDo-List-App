@@ -14,9 +14,7 @@ A practical exercise to understand the integration between Solidity smart contra
 - Front end built using Vue 3 for reactivity.
 - Build tools powered by ViteJS.
 
-## Getting Started
-
-### Prerequisites
+## Prerequisites
 
 - A Metamask account. If you don't have one, install the [Metamask extension](https://metamask.io/download.html).
 - Enough ETH in your Metamask wallet to handle transaction fees for the selected layer or testnet. Sepolia is recommended. You can claim free Sepolia ETH from various faucets.
@@ -26,7 +24,7 @@ A practical exercise to understand the integration between Solidity smart contra
 1. **Adding Sepolia to Metamask**: Follow the guide [here](https://www.coingecko.com/learn/sepolia-eth#adding-sepolia-to-metamask) to add the Sepolia testnet to Metamask.
 2. **Claiming Sepolia ETH**: To obtain free ETH for the Sepolia testnet, visit the faucet [here](https://sepolia-faucet.pk910.de/).
 
-### Using the Application
+## Using the Application
 
 1. Visit [EVM-Todo](https://evm-todo.viperfish.com.au).
 2. Link your Metamask account.
