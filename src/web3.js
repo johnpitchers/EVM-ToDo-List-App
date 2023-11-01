@@ -68,10 +68,7 @@ class Web3 {
         message: "Network not recognised.",
         recoverable: false
       }
-      //throw new Error(this.state.error.valueOf().message);
     }
-    console.log("Signer", this.signer)
-    console.log(this.state.network.name);
   }
 
   setUpEventListeners = async () => {
@@ -85,20 +82,16 @@ class Web3 {
     window.ethereum.on('accountsChanged', async (e) => {
       if (e[0] !== this.signer.getAddress()) {
         await this.connectToMetamask();
-        //alert("Blockchain account has been changed.");
         window.location.reload();
       }
     });
 
     window.ethereum.on('chainChanged', (e) => {
-      console.log("CHAIN CHAINGED: ", e)
       this.provider.getNetwork().then((from, to) => {
-        console.log("NETWORKS", from, to);
       });
     })
     window.ethereum.on('connect', (e) => {
       console.log("ACCOUNT CONNECTED: ", e)
-
     })
   }
 
@@ -134,7 +127,6 @@ class Web3 {
 
   getBlockNumber = async () => {
     let blockNumber = await this.provider.getBlockNumber();
-    console.log("Block number:", blockNumber);
     return blockNumber;
   }
 
@@ -162,8 +154,6 @@ class Web3 {
       ];
       txData.push(taskData);
     }
-    console.log("TX DATA", txData)
-    await console.log("CREATING TRANSACTION");
     let tx;
     try {
       tx = await this.contract.updateTasks(txData);
@@ -175,13 +165,11 @@ class Web3 {
       };
       return;
     }
-    console.log("TRANSACTION SENT", tx);
     this.state.txHash = tx.hash;
     this.state.awaitingConfirmation = true;
     await tx.wait();
     this.state.awaitingConfirmation = false;
     this.state.txConfirmed = true;
-    console.log("TRANSACTION MINED", tx);
   }
 }
 

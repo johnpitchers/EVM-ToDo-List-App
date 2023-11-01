@@ -26,7 +26,6 @@ const sortOptions = {
 }
 
 const sortend = (e) => {
-  console.log(e);
   // Skip invisible deleted tasks at the front of the array
   let i = 0;
   while (props.todos.valueOf()[i].isDeleted) {

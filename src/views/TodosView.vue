@@ -81,7 +81,7 @@ import Web3Singleton from "@/web3";
 /***************************
  * Props,refs and emits
  ***************************/
-const pageTitle = "Blockchain Todo List!";
+const pageTitle = "Your tasks...";
 const dataFrom = ref('blockchain');
 const connectedToWeb3 = ref(false);
 const newTodoText = ref("");
@@ -124,7 +124,6 @@ onMounted(async () => {
 watch(
   () => web3.state.awaitingConfirmation,
   () => {
-    console.log("waiting changed to", web3.state.awaitingConfirmation);
     awaitingConfirmation.value = web3.state.awaitingConfirmation;
     if (awaitingConfirmation.value) {
       slowNetwork.value = false;
@@ -158,8 +157,7 @@ watch(() => web3.state.error, () => {
     if (web3.state.error.code === 80002) {
       web3.state.error.message = "<p>Your browser is Web3 enabled but doesn't seem to be configured or is unable to interact with smart contracts.</p><p>Please install the Metamask extension if possible</p><p>Make sure you have set up a wallet and enabled web3 in your settings. Connect to the Sepolia testnet.</p><p>Refresh the page when ready.</p>";
     }
-    // A message will automatically be displayed to the user.
-    // See template code.
+    // A message will automatically be displayed to the user. See template code.
     emit('dataChanged', dataChanged.value, false);
   }
 });
@@ -175,7 +173,6 @@ const userConfirmDataLocation = () => {
       dataFrom.value = 'blockchain';
       resolve(true);
     });
-
     document.getElementById('confirmMemory').addEventListener('click', () => {
       dataFrom.value = 'memory';
       resolve(true);
@@ -204,7 +201,6 @@ const reorderDeletedTasks = () => {
       todos.value.splice(i + 1, 1);
     }
   }
-  console.log(todos.value)
 }
 
 const rearrange = (arr, oldIndex, newIndex) => {
@@ -220,7 +216,6 @@ const rearrange = (arr, oldIndex, newIndex) => {
 const addNewTodo = () => {
   if (newTodoText.value.length === 0) return;
   let order = todos.value.length ? (todos.value[todos.value.length - 1].order) + 1000 : 1000;
-  console.log(order);
   todos.value.push({
     id: (Math.floor(Math.random() * Math.pow(16, 8))).toString(16),
     index: 0, // This tells the smart contract this it is a new task.

@@ -4,6 +4,7 @@
 
 A practical exercise to understand the integration between Solidity smart contracts and a reactive front end. This todo application allows users to store and manage a task list on EVM-compatible blockchains using Metamask.
 
+Live Demo: https://evm-todo.viperfish.com.au/
 > **Disclaimer**: Using blockchain as a storage method for a todo application is not recommended for real-world use. This is a purely educational exercise to understand the principles of Solidity and blockchain interaction through a JavaScript front end.
 
 ## Features
@@ -53,5 +54,9 @@ The frontend codebase can be found in the `src/` directory. Vue 3 is employed fo
 npm install
 npm run dev
 ```
+
+## Live demo
+
+A live demo is available here: https://evm-todo.viperfish.com.au/
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.
