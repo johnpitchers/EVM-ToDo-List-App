@@ -62,25 +62,6 @@ const commitToBlockchain = async () => {
 
 <style>
 
-h1 {
-  font-weight: bold;
-}
-
-#overlay {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #ffffff90;
-}
-
-.txconfirmation {
-  color: green;
-  font-weight: bold;
-  text-transform: uppercase
-}
-
 .fade-enter-active, .fade-leave-active {
   transition: opacity 3s;
 }

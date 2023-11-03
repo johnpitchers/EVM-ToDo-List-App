@@ -6,7 +6,7 @@
     <h3>Why Blockchain for a Todo App?</h3>
     <p>Well, actually, you shouldn't. The application of blockchain technology for a todo app is unnecessary overkill, but it was a valuable learning experience as a deep dive into building a Solidity smart contract and interacting with it via a Javascript frontend.</p>
     <p>I certainly wouldn't recommend using this app as a real-world task manager. Gas fees are quite high (testnet ETH is free). It's just a bit of learning fun and perfectly fine on a testnet.</p>
-    <p>Set up <a href="https://metamask.io/download/" target="_blank">the Metamask extension</a> to connect to the <a href="https://www.coingecko.com/learn/sepolia-eth#adding-sepolia-to-metamask" target="_blank">Sepolia Testnet</a>, get some <a href="https://sepolia-faucet.pk910.de/" target="_blank">free Sepolia ETH</a> and try it out. All the front-end and smart contract code is on Github.</p>
+    <p>Set up <a href="https://metamask.io/download/" target="_blank">the Metamask extension</a> to connect to the <a href="https://www.coingecko.com/learn/sepolia-eth#adding-sepolia-to-metamask" target="_blank">Sepolia Testnet</a>, get some <a href="https://sepolia-faucet.pk910.de/" target="_blank">free Sepolia ETH</a> and try it out. All the front-end and smart contract code is on <a href="https://github.com/johnpitchers/EVM-ToDo-List-App" target="_blank" title="Code is on Github">Github</a>. </p>
     <h5>Give me a follow.</h5>
     <p><a href="https://viperfish.com.au" target="_blank">https://viperfish.com.au</a><br>
       <a href="https://twitter.com/johnpitchers" target="_blank">https://twitter.com/johnpitchers</a><br>
@@ -16,12 +16,5 @@
   </div>
 </template>
 
-<style>
-@media (min-width: 1024px) {
-  .about {
-
-  }
-}
-</style>
 <script setup>
 </script>

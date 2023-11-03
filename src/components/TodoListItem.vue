@@ -4,9 +4,13 @@
       <input name="isdone" type="checkbox" ref="doneCheck" class="form-check-input me-2" v-model="todo.isDone" @change="emit('persist')">
       <span v-show="!todo.edit" class="">{{ todo.task }}</span>
       <input name="task" type="text" v-show="todo.edit" ref="editbox" v-model="todo.task"
+             :maxlength="maxTaskLength"
              @blur="emit('update',todo, index, false)"
              @keyup.enter="emit('update',todo, index, false)"
              @keyup.esc="emit('update',todo,index, false)">
+      <small v-show="todo.edit" class="chars-left text-muted position-absolute bottom-0 end-0">
+        {{ remainingCharacters }} characters left
+      </small>
     </div>
     <div class="d-flex align-items-center">
       <Transition appear name="slide-fade">
@@ -25,7 +29,7 @@
 ===========================================================
 
 <script setup>
-import {ref, watch} from "vue";
+import {ref, computed} from "vue";
 
 const props = defineProps({
   todo: Object,
@@ -33,16 +37,22 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['edit', 'update', 'delete', 'persist']);
-
 const editbox = ref(null);
 const doneCheck = ref(null);
 
+// Why is maxTaskLength 120? The smart contract requires the task to be under 128 bytes.
+// This allows for an emoji or 2 which can occupy up to 4 bytes.😊
+const maxTaskLength = 120;
+const remainingCharacters = computed(() => {
+  return maxTaskLength - props.todo.task.length;
+});
+
 const editTodo = (todo) => {
-  emit('edit', todo)
+  emit('edit', todo);
   window.requestAnimationFrame(() => {
     editbox.value.focus();
   });
-}
+};
 
 </script>
 
@@ -70,11 +80,14 @@ input[type="text"] {
       text-decoration: line-through;
     }
   }
-
 }
 
 input[ref="editbox"] {
   border-width: 0;
+}
+
+.chars-left {
+  font-size: 0.6em;
 }
 
 .slide-fade-enter-active {

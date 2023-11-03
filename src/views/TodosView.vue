@@ -145,6 +145,13 @@ watch(
   }
 );
 
+/***************************
+ * Error Watcher.
+ * Uses arbitrary error codes for this app.
+ * 80000 Metamask or other web3 extension isn't installed or enabled.
+ * 80001 Metamask is connected to an unrecognised network
+ * 80002 Metamsk is installed. A wallet isn't configured. Indicated by the absence of a Signer.
+ ***************************/
 watch(() => web3.state.error, () => {
   if (web3.state.error.code) {
     if (web3.state.error.code === 80000) {
@@ -157,7 +164,6 @@ watch(() => web3.state.error, () => {
     if (web3.state.error.code === 80002) {
       web3.state.error.message = "<p>Your browser is Web3 enabled but doesn't seem to be configured or is unable to interact with smart contracts.</p><p>Please install the Metamask extension if possible</p><p>Make sure you have set up a wallet and enabled web3 in your settings. Connect to the Sepolia testnet.</p><p>Refresh the page when ready.</p>";
     }
-    // A message will automatically be displayed to the user. See template code.
     emit('dataChanged', dataChanged.value, false);
   }
 });
@@ -165,21 +171,6 @@ watch(() => web3.state.error, () => {
 /***************************
  * Functions
  ***************************/
-
-const userConfirmDataLocation = () => {
-  return new Promise((resolve, reject) => {
-    dataFrom.value = '';
-    document.getElementById('confirmBlockchain').addEventListener('click', () => {
-      dataFrom.value = 'blockchain';
-      resolve(true);
-    });
-    document.getElementById('confirmMemory').addEventListener('click', () => {
-      dataFrom.value = 'memory';
-      resolve(true);
-    });
-  })
-}
-
 const getDataFromChain = async () => {
   try {
     await web3.connectToMetamask();
@@ -193,23 +184,13 @@ const getDataFromChain = async () => {
   }
 }
 
-// Move tasks marked as deleted to the top of the array.
 const reorderDeletedTasks = () => {
+  // Move tasks marked as deleted to the top of the array.
   for (let i = 0; i < todos.value.length; i++) {
     if (todos.value[i].isDeleted) {
       todos.value.splice(0, 0, todos.value[i]);
       todos.value.splice(i + 1, 1);
     }
-  }
-}
-
-const rearrange = (arr, oldIndex, newIndex) => {
-  if (oldIndex > newIndex) {
-    arr.splice(newIndex, 0, arr[oldIndex]);
-    arr.splice(oldIndex + 1, 1);
-  } else {
-    arr.splice(newIndex + 1, 0, arr[oldIndex]);
-    arr.splice(oldIndex, 1);
   }
 }
 
@@ -243,6 +224,3 @@ const setBlockchainDataHash = () => {
   window.localStorage.setItem('blockChainDataHash', web3.getDataHash(todos.value));
 }
 </script>
-
-===========================================================
-

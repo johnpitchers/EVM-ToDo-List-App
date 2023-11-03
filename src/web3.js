@@ -6,12 +6,13 @@ import {reactive, watch} from "vue";
 let instance = null
 
 class Web3 {
-
   signer = null;
   provider = null;
   network = null;
   contract = null;
   allowedNetworks = ["sepolia", "polygon", "optimism"];
+
+  // Set up a reactive state that can be watched by Vue components.
   state = reactive({
     network: {},
     awaitingConfirmation: false,
@@ -20,8 +21,9 @@ class Web3 {
     error: {},
   });
 
-
   constructor() {
+    // I've coded this class to follow the Singleton pattern so the one
+    // instance can be imported into as many components as needed.
     if (instance) {
       throw new Error("Only one instance allowed.")
     }
@@ -74,29 +76,25 @@ class Web3 {
   setUpEventListeners = async () => {
     this.provider.on('network', async (e) => {
       console.log("NETWORK EVENT", e);
-      //alert("Network has been changed.");
       window.location.reload();
-    })
+    });
 
-    // This event fires when the user selects a different account/address in Metamask.
     window.ethereum.on('accountsChanged', async (e) => {
       if (e[0] !== this.signer.getAddress()) {
-        await this.connectToMetamask();
         window.location.reload();
       }
     });
 
     window.ethereum.on('chainChanged', (e) => {
-      this.provider.getNetwork().then((from, to) => {
-      });
-    })
+      window.location.reload();
+    });
+
     window.ethereum.on('connect', (e) => {
-      console.log("ACCOUNT CONNECTED: ", e)
-    })
+      //
+    });
   }
 
   getTasks = async () => {
-
     this.contract = new Contract(contractAddresses[this.state.network.name], contractABI, this.signer);
     let result = await this.contract.getTasksByOwner();
     let tasks = [];
@@ -118,22 +116,6 @@ class Web3 {
 
   getDataHash = (data) => {
     return id(JSON.stringify(data));
-  }
-
-  // connectToInfura = async () => {
-  //   let url = `https://sepolia.infura.io/v3/${import.meta.env.VITE_INFURA_API_KEY}`;
-  //   let ethProvider = new JsonRpcProvider(url);
-  // }
-
-  getBlockNumber = async () => {
-    let blockNumber = await this.provider.getBlockNumber();
-    return blockNumber;
-  }
-
-  getBalance = async () => {
-    let ethBalance = await this.provider.getBalance(this.signer.getAddress());
-    console.log("Eth balance:", formatEther(ethBalance));
-    return ethBalance;
   }
 
   sendTransaction = async () => {

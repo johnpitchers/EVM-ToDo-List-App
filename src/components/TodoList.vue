@@ -15,15 +15,14 @@ import TodoListItem from '../components/TodoListItem.vue';
 import {Sortable} from "sortablejs-vue3";
 
 const drag = false;
-
 const props = defineProps({
   todos: Array
 })
-
 const sortOptions = {
   animation: 450,
   handle: '.drag-handle'
 }
+const emit = defineEmits(['persist']);
 
 const sortend = (e) => {
   // Skip invisible deleted tasks at the front of the array
@@ -47,8 +46,7 @@ const rearrange = (oldIndex, newIndex) => {
     props.todos.valueOf().splice(oldIndex, 1);
   }
 
-  // Update order property.
-  // Reorder the whole list if there is a clash of order numbers
+  // Update the order property. Reorder the whole list if there is a clash of order numbers
   const todos = props.todos.valueOf();
   if (todos.length > 1) {
     let reOrderWholeList = false;
@@ -70,7 +68,6 @@ const rearrange = (oldIndex, newIndex) => {
     }
     todos[newIndex].order = order;
   }
-
   persist();
 }
 
@@ -83,8 +80,6 @@ const reOrderList = () =>{
     todo.order = index * 1000;
   }
 }
-
-const emit = defineEmits(['persist']);
 
 const deleteTodo = (index) => {
   // Workaround as transitionGroup doesn't work with Sortable.
